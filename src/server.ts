@@ -1,13 +1,14 @@
+import "reflect-metadata";
 import express from 'express';
+import {router} from './routes';
+import "./database";
 
 const app = express();
 
-app.get("/", (req, res) => {
-    return res.status(200).json({
-        success: true,
-        message: "Hello there",
-    });
-});
+app.use(express.json())
+
+
+app.use(router);
 
 const PORT = process.env.PORT || 3000;
 

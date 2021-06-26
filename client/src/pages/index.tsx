@@ -27,7 +27,7 @@ const Home: React.FC<Users> = ({users}) => {
         <title>Home Page</title>
       </Head>
 
-      <main>
+      <main className="animeTop">
         {users?.map(user => (
             <User key={user.id} username={user.username} name={user.name}></User>
         ))}

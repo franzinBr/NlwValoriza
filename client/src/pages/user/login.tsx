@@ -22,6 +22,7 @@ const Login: React.FC = () => {
     useEffect(() => {
         if(isAuthenticated) Router.push("/");
     }, [isAuthenticated])
+    
     const onSubmit: SubmitHandler<Inputs> = async data => {
         try {
             await login(data);

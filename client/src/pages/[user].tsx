@@ -23,7 +23,7 @@ const User = ({user, tags}: InferGetServerSidePropsType<typeof getServerSideProp
     return (
         <DivP>
             <Profile id={user.id} name={user.name} username={user.username}/>
-            {isAuthenticated && <CreateCompliment tags={tags}/>}
+            {isAuthenticated && <CreateCompliment tags={tags} id={user.id}/>}
             {user?.compliments?.map((compliment: ICompliment) => (
                 <div className="comment" key={compliment.id} ><Compliment  compliment={compliment}/></div>
             ) )}

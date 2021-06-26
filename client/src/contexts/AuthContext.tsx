@@ -49,7 +49,7 @@ export const AuthProvider = ( { children } ) => {
                 const res = await refreshRequest();
                 if(res.data.success){
                     setToken(res.data.authToken);
-                    api.defaults.headers['Authorization'] = `Bearer ${token}`;
+                    api.defaults.headers['Authorization'] = `Bearer ${res.data.authToken}`;
                     setUser(res.data.user)
                     setIsAuthenticated(true);
                 }
@@ -68,7 +68,7 @@ export const AuthProvider = ( { children } ) => {
             const res = await refreshRequest();
             if(res.data.success){
                 setToken(res.data.authToken);
-                api.defaults.headers['Authorization'] = `Bearer ${token}`;
+                api.defaults.headers['Authorization'] = `Bearer ${res.data.authToken}`;
                 setUser(res.data.user)
                 setIsAuthenticated(true);
             }

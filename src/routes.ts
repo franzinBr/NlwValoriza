@@ -8,6 +8,7 @@ import { ListUserController } from "./controllers/ListUserController";
 import { ListUserReceiveComplimentsController } from "./controllers/ListUserReceiveComplimentsController";
 import { ListUsersController } from "./controllers/ListUsersController";
 import { ListUserSendComplimentsController } from "./controllers/ListUserSendComplimentsController";
+import { LogoutUserController } from "./controllers/LogoutUserController";
 import { RefreshTokenController } from "./controllers/RefreshTokenController";
 import { ensureAdmin } from "./middlewares/ensureAdmin";
 import { ensureAuthenticated } from "./middlewares/ensureAuthenticated";
@@ -26,12 +27,14 @@ const listTagsController = new ListTagsController();
 const listUsersController = new ListUsersController();
 const refreshTokenController = new RefreshTokenController();
 const listUserController = new ListUserController();
+const logoutUserController = new LogoutUserController();
 
 router.post("/users", createUserController.handle);
 router.post("/login", authenticateUserController.handle)
 router.post("/tags", ensureAuthenticated, ensureAdmin, createTagController.handle);
 router.post("/compliments", ensureAuthenticated, createComplimentController.handle);
 router.post("/refresh", refreshTokenController.handle);
+router.post("/logout", ensureAuthenticated, logoutUserController.handle)
 
 router.get("/users/compliments/send/:username",   listUserSendComplimentsController.handle);
 router.get("/users/compliments/receive/:username", listUserReceiveComplimentsController.handle);

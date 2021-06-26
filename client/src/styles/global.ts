@@ -48,6 +48,31 @@ export default createGlobalStyle`
         display: none; /* for Chrome, Safari, and Opera */
     }
 
+    .animeLeft {
+        opacity: 0;
+        transform: translateX(-20px);
+        animation: anime 0.3s forwards;
+    }
+
+    .animeTop {
+        opacity: 0;
+        transform: translateY(-10rem);
+        animation: anime 0.3s forwards;
+    }
+
+    .animeRight {
+        opacity: 0;
+        transform: translateX(10rem);
+        animation: anime 0.3s forwards;
+    }
+    @keyframes anime {
+        to {
+        opacity: 1;
+        transform: initial;
+        }
+    }
+
+
 
     @media (max-width: 768px){
         html {

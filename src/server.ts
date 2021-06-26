@@ -6,27 +6,25 @@ import {router} from './routes';
 import "./database";
 import cors from 'cors';
 const cookieParser = require('cookie-parser');
+import { errorHandler } from "./middlewares/errorHandler";
+import morgan from 'morgan';
+import helmet from 'helmet';
+
 
 const app = express();
 
-app.use(express.json())
+app.use(express.json());
+app.use(morgan("common"));
+app.use(
+    helmet({
+      contentSecurityPolicy: false,
+    }),
+  );
 app.use(cors({ origin: process.env.FRONT_URL, credentials: true }));
-app.use(cookieParser())
+app.use(cookieParser());
 app.use(router);
+app.use(errorHandler);
 
-app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
-    if(err instanceof Error){
-        return res.status(400).json({
-            success: false,
-            message: err.message
-        });
-    }
-    
-    return res.status(500).json({
-        success: false,
-        message: err || "internal server error"
-    })
-});
 
 const PORT = process.env.PORT || 5000;
 

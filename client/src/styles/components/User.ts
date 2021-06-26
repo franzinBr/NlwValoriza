@@ -17,4 +17,15 @@ export const DivUser = styled.div`
     a {
         color: ${props => props.theme.colors.text_second};
     }
+
+    .user {
+        position: relative;
+        width: 100%;
+        height: .3rem;
+        margin-bottom: .2rem;
+        margin-top: -.4rem ;
+        background: ${props => props.theme.colors.primary};
+    }
+
+
 `;

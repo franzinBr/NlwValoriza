@@ -8,7 +8,11 @@ import { AuthContext } from '../contexts/AuthContext';
 
 const Header: React.FC = () => {
 
-    const {isAuthenticated} = useContext(AuthContext)
+    const {isAuthenticated, logout} = useContext(AuthContext)
+
+    async function handleClick() {
+        logout();
+    }
 
     return (
         <HeaderContainer>
@@ -27,28 +31,10 @@ const Header: React.FC = () => {
                             <Link href="/user/signup">
                                 <a>Sign Up</a>
                             </Link>
-                        </>) : <a>Logout</a> }
+                        </>) : <a onClick={handleClick}>Logout</a> }
                 </div>
             </nav>
         </HeaderContainer>
-        /*<HeaderContainer>
-            <NavContainer>
-                <LogoContainer>
-                    <Link href="/">
-                        <h1><Span>\</Span>Valoriza<Span>\</Span></h1>
-                    </Link>
-                    {!isAuthenticated ? (<>
-                        <Link href="/user/login">
-                            <a>Login</a>
-                        </Link>
-                        <Link href="/user/login">
-                            <a>SignUp</a>
-                        </Link>
-                    </>) : <p>Logout</p> }
-                </LogoContainer>
-            </NavContainer>
-             
-        </HeaderContainer>*/
     )
 }
 

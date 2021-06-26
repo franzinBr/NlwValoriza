@@ -33,6 +33,11 @@ export const HeaderContainer = styled.header`
 
             a {
                 padding-right: 0.8rem;
+                cursor: pointer;
+                transition: all .3s ease;
+            }
+            a:hover{
+                color: ${props => props.theme.colors.primary};
             }
         }
     }

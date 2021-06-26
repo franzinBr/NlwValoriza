@@ -36,12 +36,12 @@ const Login: React.FC = () => {
     if(isAuthenticated) return null
     if(!loading && !isAuthenticated)
     return (
-        <Div>
+        <Div className="animeLeft">
             <form onSubmit={handleSubmit(onSubmit)}>
                 <Input label="Email" type="text" name="email" register={register} error={errors["email"]}/>
                 <Input label="Password" type="password" name="password" register={register} error={errors["password"]}/>
                 <Button>Login</Button>
-                {error && <span>{error}</span>}
+                {error && <span className="error">{error}</span>}
             </form>
             <div className="change">
                 <p>Don't have an account?</p>

@@ -43,6 +43,13 @@ export const Div = styled.div`
 
     }
 
+    .error {
+        color: #ff0033;
+        padding: .8rem .2rem;
+        font-size: 1rem;
+
+    }
+
     @media (max-width: 768px){
         width: 75%;
         height: 30rem;

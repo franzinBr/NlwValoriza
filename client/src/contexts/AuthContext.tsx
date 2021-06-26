@@ -1,6 +1,6 @@
 import Router from "next/router";
 import { createContext, useState } from "react";
-import { loginRequest, refreshRequest } from "../services/auth";
+import { loginRequest, logoutRequest, refreshRequest } from "../services/auth";
 import { useEffect } from "react";
 import { parseCookies } from 'nookies'
 import { api } from "../services/api";
@@ -26,6 +26,7 @@ type AuthContextType = {
     loading: boolean | null;
     login: (data: loginType) => Promise<void>;
     refresh: () => Promise<void>;
+    logout: () => Promise<void>;
 }
 
 
@@ -57,7 +58,6 @@ export const AuthProvider = ( { children } ) => {
             }
         }
         refresh();
-
 
     }, [])
 
@@ -112,10 +112,22 @@ export const AuthProvider = ( { children } ) => {
         
     }
 
+    const logout = async () => {
+        setToken(null)
+        setUser(null)
+        setIsAuthenticated(false);
+        const res = await logoutRequest();
+        console.log(res.data);
+        console.log(res)
+        if(res.data.success){
+            Router.push('/');
+        }
+
+    }
 
 
     return (
-        <AuthContext.Provider value={{isAuthenticated, user, token, loading , login, refresh}}>
+        <AuthContext.Provider value={{isAuthenticated, user, token, loading , login, refresh, logout}}>
             {children}
         </AuthContext.Provider>
     )

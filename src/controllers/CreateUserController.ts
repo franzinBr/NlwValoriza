@@ -12,7 +12,7 @@ class CreateUserController {
         const user = await createUserService.execute({name, username, email, admin, password});
         return res.status(200).json({
             success: true,
-            user
+            message: "account created successfully"
         });
 
     }

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { GetServerSideProps } from 'next'
 import { InferGetServerSidePropsType } from 'next'
 import { IUser } from '../Interfaces/UserInterface';
@@ -10,52 +10,69 @@ import CreateCompliment from '../components/CreateCompliment';
 import { listUserRequest } from '../services/users';
 import { complimentsReceiveRequest } from '../services/compliments';
 import { listTagsRequest } from "../services/Tags";
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { AuthContext } from '../contexts/AuthContext';
+import { useRouter } from 'next/router'
 
 export interface UserProp {
     user: IUser
 }
 
 const User = ({user, tags}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
-    const {isAuthenticated} = useContext(AuthContext)
+    const {isAuthenticated, user: userData} = useContext(AuthContext)
+    const {user: username} = useRouter().query
+    const [newCompliments, setNewCompliments] = useState<ICompliment[] | null>([])
+
+    useEffect(() => {
+        setNewCompliments([]);
+    }, [username])
 
     return (
         <DivP>
             <Profile id={user.id} name={user.name} username={user.username}/>
-            {isAuthenticated && <CreateCompliment tags={tags} id={user.id}/>}
-            {user?.compliments?.map((compliment: ICompliment) => (
-                <div className="comment" key={compliment.id} ><Compliment  compliment={compliment}/></div>
+            {isAuthenticated && username !== userData?.username && <CreateCompliment 
+                tags={tags} 
+                id={user.id} 
+                setNewCompliments={setNewCompliments}/>}
+            {newCompliments?.map((compliment: ICompliment) => (
+                <div className="comment new animeLeft" key={compliment.id} ><Compliment  compliment={compliment}/></div>
             ) )}
+            {user?.compliments?.map((compliment: ICompliment) => (
+                <div className="comment animeRight" key={compliment.id} ><Compliment  compliment={compliment}/></div>
+            ) )}
+            {(user.compliments.length === 0 && newCompliments.length === 0) && <p className="dont">Oops... this user doesn't have any compliments</p>}
+
         </DivP>
     )
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-    //console.log(context.params)
     
     const { user: username } = context.params
-    const res = await listUserRequest(username);
-    let user;
-    //console.log(res)
-    if(res.data.success){
-        user = res.data.user;
+
+    try {
+        const res = await listUserRequest(username);
+        let user = res.data.user;
         const res2 = await complimentsReceiveRequest(user.username);
         if(res2.data.success) user.compliments = res2.data.compliments;
-        
-    }
-   
-
-    //console.log(user)
-    const resTag = await listTagsRequest();
-    let tags;
-    if(resTag.data.success) tags = resTag.data.tags
     
-    // fetch user here
+        const resTag = await listTagsRequest();
+        let tags;
+        if(resTag.data.success) tags = resTag.data.tags
 
-    return {
-      props: {user, tags}, // will be passed to the page component as props
+        return {
+            props: {user, tags}, // will be passed to the page component as props
+          }
+        
+
+    } catch (error) {
+        return {
+            notFound: true,
+          }
     }
+    
+    
+
   }
 
 export default User

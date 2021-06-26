@@ -4,6 +4,7 @@ import { compare } from "bcryptjs";
 import { sign } from "jsonwebtoken"
 import { GenerateAuthTokenService } from "./GenerateAuthTokenService";
 import { GenerateRefreshTokenService } from "./GenerateRefreshTokenService";
+import { ErrorResponse } from "../utils/ErrorResponse";
 
 interface IAuthenticateUserService{
     email: string,
@@ -15,10 +16,10 @@ class AuthenticateUserService {
         const usersRepository = getCustomRepository(UsersRepositories)
 
         const user = await usersRepository.findOne({email})
-        if(!user) throw new Error("Invalid Credentials");
+        if(!user) throw new ErrorResponse("Invalid Credentials", 400);
 
         const passwordMatch = await compare(password, user.password);
-        if(!passwordMatch) throw new Error("Invalid Credentials");
+        if(!passwordMatch) throw new ErrorResponse("Invalid Credentials", 400);
 
         const generateAuthTokenService = new GenerateAuthTokenService();
         const generateRefreshTokenService = new GenerateRefreshTokenService();
@@ -27,13 +28,6 @@ class AuthenticateUserService {
         const authToken = generateAuthTokenService.execute({email, id});
         const refreshToken = generateRefreshTokenService.execute({email, id});
         
-        /*const token = sign({
-            email: user.email
-        }, process.env.AUTH_TOKEN_SECRET, {
-            subject: user.id,
-            expiresIn: process.env.AUTH_TOKEN_EXPIRE
-        })*/
-
         return {authToken, refreshToken, userInfo: {
             id: user.id,
             name: user.name,

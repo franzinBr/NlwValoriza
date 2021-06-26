@@ -1,6 +1,7 @@
 import { getCustomRepository } from "typeorm";
 import { UsersRepositories } from "../repositories/UsersRepositories"
 import { hash, genSalt } from "bcryptjs"
+import { ErrorResponse } from "../utils/ErrorResponse";
 
 interface IUserRequest {
     name: string,
@@ -24,7 +25,7 @@ class CreateUserService {
 
         let passwordRegex = new RegExp('(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9])(?=.{8,})')
         if(!passwordRegex.test(password)) 
-            throw new Error("the password must contain at least 8 characters, with at least one digit, one lowercase letter, one uppercase letter and one special character")
+            throw new ErrorResponse("the password must contain at least 8 characters, with at least one digit, one lowercase letter, one uppercase letter and one special character", 400)
         
         const salt = await genSalt(10);
         password = await hash(password, salt)
